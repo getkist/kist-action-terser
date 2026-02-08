@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "@getkist/action-terser"
+version: 1.0.0
+abstract: "JavaScript minification actions for kist using Terser"
+authors:
+  - name: "kist"
+repository-code: "https://github.com/getkist/kist-action-terser"
+license: MIT
+keywords:
+  - kist
+  - terser
+  - minification
+  - javascript
