@@ -58,7 +58,7 @@ Minifies JavaScript files using Terser to reduce file size and optimize performa
 #### Options
 
 | Option | Type | Required | Description |
-|--------|------|----------|-------------|
+| -------- | ------ | ---------- | ------------- |
 | `inputPath` | `string` | Yes | Path to the input JavaScript file |
 | `outputPath` | `string` | Yes | Path where the minified file will be saved |
 | `customConfig` | `object` | No | Custom Terser configuration to merge with defaults |
