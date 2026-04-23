@@ -1,6 +1,6 @@
 {
   "name": "@getkist/action-terser",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "JavaScript minification actions for kist using Terser",
   "main": "./dist/index.cjs",
   "types": "dist/index.d.ts",
