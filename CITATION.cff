@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
 title: "@getkist/action-terser"
-version: 1.0.20
+version: 1.0.21
 date-released: 2026-04-23
 abstract: "JavaScript minification actions for kist using Terser"
 authors:
