@@ -16,6 +16,11 @@ JavaScript minification actions for [kist](https://github.com/getkist/kist) buil
 npm install @getkist/action-terser
 ```
 
+### Requirements
+
+- Node.js >= 22.0.0
+- `kist >= 0.1.58` (peer dependency)
+
 ## Usage
 
 ### As a kist plugin

@@ -29,7 +29,7 @@ import { JavaScriptMinifyAction } from "./actions/JavaScriptMinifyAction/index.j
  * pipeline steps.
  */
 const plugin: ActionPlugin = {
-    version: "1.0.0",
+    version: "1.0.22",
     description: "JavaScript minification for kist using Terser",
     author: "kist",
     repository: "https://github.com/getkist/kist-action-terser",
