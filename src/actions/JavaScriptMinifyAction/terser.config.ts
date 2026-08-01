@@ -4,6 +4,20 @@
 
 // https://terser.org/docs/api-reference/
 
+/**
+ * Default Terser configuration used by {@link JavaScriptMinifyAction} for
+ * every minification call. Tuned for production JavaScript bundles: it
+ * drops `console.*`/`debugger` calls, disables property mangling (renaming
+ * object properties is unsafe without additional analysis), strips comments,
+ * and targets ES5 for broad browser compatibility.
+ *
+ * Any `customConfig` passed to `JavaScriptMinifyAction` is shallow-merged
+ * on top of this object (see `minifyFile` in `JavaScriptMinifyAction.ts`),
+ * so overriding e.g. `compress` replaces this entire `compress` section
+ * rather than merging individual sub-options. See the inline comments below
+ * for the full set of `compress` options Terser supports and their
+ * upstream defaults.
+ */
 const terserConfig = {
     parse: {
         // parse options
@@ -106,4 +120,5 @@ const terserConfig = {
 // Export
 // ============================================================================
 
+/** The default Terser configuration object; see the JSDoc above `terserConfig` for details. */
 export default terserConfig;
