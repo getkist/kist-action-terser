@@ -139,6 +139,54 @@ describe("JavaScriptMinifyAction", () => {
             expect(result).toBeDefined();
         });
 
+        it("should let customConfig override the default ecma target", async () => {
+            // The defaults were re-applied after the customConfig spread, so
+            // `ecma` (and `nameCache`) could not actually be overridden and
+            // output was always compiled for ES5.
+            await fs.writeFile(
+                inputFile,
+                "window.f = (a) => a ** 2;\n",
+                "utf8",
+            );
+
+            await action.execute({
+                inputPath: inputFile,
+                outputPath: outputFile,
+                customConfig: { ecma: 2020, compress: false, mangle: false },
+            });
+
+            const result = await fs.readFile(outputFile, "utf8");
+            // An ES2020 target keeps the arrow function and `**`; ES5 would
+            // have had to rewrite them.
+            expect(result).toContain("=>");
+        });
+
+        it("should write a source map when one is requested", async () => {
+            // Terser produced the map and the action discarded it, so the
+            // documented sourceMap option cost work and delivered nothing.
+            await action.execute({
+                inputPath: inputFile,
+                outputPath: outputFile,
+                customConfig: { sourceMap: {} },
+            });
+
+            const map = await fs.readFile(`${outputFile}.map`, "utf8");
+            expect(JSON.parse(map).version).toBe(3);
+
+            await fs.unlink(`${outputFile}.map`);
+        });
+
+        it("should not write a source map by default", async () => {
+            await action.execute({
+                inputPath: inputFile,
+                outputPath: outputFile,
+            });
+
+            await expect(
+                fs.access(`${outputFile}.map`),
+            ).rejects.toMatchObject({ code: "ENOENT" });
+        });
+
         it("should create output directory if it does not exist", async () => {
             const nestedOutput = path.join(testDir, "nested", "deep", "output.min.js");
             

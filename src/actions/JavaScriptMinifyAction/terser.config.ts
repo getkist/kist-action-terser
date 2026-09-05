@@ -101,9 +101,11 @@ const terserConfig = {
         comments: false, // Remove comments to reduce file size
         beautify: false, // Disable beautification for smaller file size
     },
-    sourceMap: {
-        // source map options
-    },
+    // Source maps are off by default. An empty object here is *truthy* to
+    // Terser, so the previous value silently asked for a map on every run —
+    // work whose result was then discarded. Set `sourceMap` through
+    // `customConfig` to opt in; the action writes the map next to the output.
+    sourceMap: false,
     // Define ECMAScript target version
     ecma: 5, // specify one of: 5, 2015, 2016, etc.
     enclose: false, // or specify true, or "args:values"

@@ -138,12 +138,23 @@ export class JavaScriptMinifyAction extends Action<JavaScriptMinifyActionOptions
             // Read JavaScript file
             const inputCode = await fs.readFile(resolvedInputPath, "utf8");
 
-            // Merge Terser configuration with explicit type casting
-            const terserOptions: MinifyOptions = {
+            // Merge Terser configuration. The defaults are applied first so
+            // that every key in `customConfig` genuinely overrides them —
+            // re-stating `ecma` and `nameCache` from the defaults *after* the
+            // spread put them back, so a caller asking for `ecma: 2020` was
+            // silently still compiled for ES5.
+            const merged: Record<string, unknown> = {
                 ...terserConfig,
                 ...customConfig,
-                ecma: terserConfig.ecma as MinifyOptions["ecma"],
-                nameCache: terserConfig.nameCache ?? undefined,
+            };
+            const terserOptions: MinifyOptions = {
+                ...merged,
+                ecma: merged.ecma as MinifyOptions["ecma"],
+                // Terser's type rejects null, which is how "no cache" is
+                // written in the default configuration.
+                nameCache:
+                    (merged.nameCache as MinifyOptions["nameCache"]) ??
+                    undefined,
             };
 
             // Minify using Terser
@@ -159,6 +170,15 @@ export class JavaScriptMinifyAction extends Action<JavaScriptMinifyActionOptions
 
             // Write minified file
             await fs.writeFile(resolvedOutputPath, result.code, "utf8");
+
+            // Terser only returns a map when one was asked for. It used to be
+            // discarded, so the documented `sourceMap` option produced the
+            // cost of generating a map and none of the benefit.
+            if (typeof result.map === "string") {
+                const mapPath = `${resolvedOutputPath}.map`;
+                await fs.writeFile(mapPath, result.map, "utf8");
+                this.logDebug(`Source map saved to ${mapPath}`);
+            }
 
             this.logDebug(`Minified JavaScript file saved to ${resolvedOutputPath}`);
         } catch (error) {
